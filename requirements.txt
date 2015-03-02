@@ -28,3 +28,4 @@ passlib==1.6.2
 psycopg2==2.5.3
 six==1.7.3
 validators==0.6.0
+config==0.3.9
