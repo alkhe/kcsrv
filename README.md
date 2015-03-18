@@ -46,29 +46,44 @@ Should even work on Windows, since basically everything is in a known good VM co
 
 1.  **Set up the VM.**  
     It will automatically be provisioned by the Ansible playbook, assuming you have both Vagrant and Ansible installed properly.
-    
+
         vagrant up
         vagrant ssh
 
+    If you are using VirtualBox on Linux encounter problems, try enabling the following kernel modules (modprobe):
+
+        vboxdrv
+        vboxnetadp
+        vboxnetflt
+
+    If you get a message saying that Intel VT-x or AMD-V is required, you can either turn off long mode or enable the virtualization service through the BIOS.
+
+        vboxmanage list vms
+        vboxmanage modifyvm <name/uuid> --longmode off
+
+    If you make any changes to the Vagrant configuration, reload the environment.
+
+        vagrant reload
+
 1.  **Set up the environment.**  
     The directory with the Vagrantfile is always mounted at `/vagrant`.
-    
+
         cd /vagrant
         virtualenv .
         pip install -r requirements.txt
 
 1.  **Create the database.**  
     Repeat this to upgrade it later.
-    
+
         ./manage.py db upgrade
         ./manage.py setup
 
 1.  **Create an account for yourself.**  
     Be sure to give yourself the `admin` and `staff` roles!
-    
+
         ./manage.py user create
 
 1.  **Run the development server.**  
     It will run on Port 5000, which `nginx` will proxy to Port 80. With the Vagrantfile's network adapter setup, this means it'll be accessible by opening <a href="http://192.168.33.10" target="_blank">192.168.33.10</a> in a browser. (This will only be accessible from your local machine.)
-    
+
         ./kcsrv.py
